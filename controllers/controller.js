@@ -7,27 +7,27 @@ module.exports = {
     // check if email is already in database, error out if true
     db.User.findAll({
       where: {
-        email: newuser.email
-      }
-    }).then(function(result) {
+        email: newuser.email,
+      },
+    }).then(function (result) {
       console.log(result.length);
       if (result.length != 0) {
         console.log(`\nEmail already taken! \n`);
         res.send({
           status: "failed",
-          reason: "email already taken"
+          reason: "email already taken",
         });
       } else {
         db.User.create({
           firstName: newuser.firstName,
           lastName: newuser.lastName,
           email: newuser.email,
-          password: newuser.password
+          password: newuser.password,
         })
-          .then(data => {
+          .then((data) => {
             res.json({ data: data });
           })
-          .catch(function(err) {
+          .catch(function (err) {
             console.log(err);
             res.json(err);
             // res.status(422).json(err.errors[0].message);
@@ -39,7 +39,7 @@ module.exports = {
   logout: (req, res) => {
     req.logout();
     res.json({
-      message: "user logged out"
+      message: "user logged out",
     });
   },
 
@@ -55,12 +55,12 @@ module.exports = {
         label: recipe.name,
         image: recipe.image,
         url: recipe.url,
-        ingredients: JSON.stringify(recipe.ingredients)
+        ingredients: JSON.stringify(recipe.ingredients),
       })
-        .then(data => {
+        .then((data) => {
           return res.json({ data: data });
         })
-        .catch(function(err) {
+        .catch(function (err) {
           console.log(err);
           return res.json({ err });
         });
@@ -77,20 +77,19 @@ module.exports = {
       // add to our database
       db.Favorite.findAll({
         where: {
-          userID: userID
-        }
+          userID: userID,
+        },
       })
-        .then(data => {
+        .then((data) => {
           // console.log(`DB query result is ${JSON.stringify(data)}`)
           return res.json({ hits: data });
         })
-        .catch(function(err) {
+        .catch(function (err) {
           console.log(err);
           return res.json({ err });
         });
     } else {
-      console.log("no user");
-      return res.json({ message: "user not signed in" });
+      return res.json({ message: "user not signed in", status: 401 });
     }
   },
 
@@ -98,11 +97,13 @@ module.exports = {
     console.log(`Removing favorite by ID ${JSON.stringify(req.body)}`);
     let deleteID = req.body.recipeID;
     db.Favorite.destroy({
-      where: { id: deleteID }
-    }).then(result => {
-      console.log(result)
+      where: { id: deleteID },
+    }).then((result) => {
+      console.log(result);
       return res.json({ message: `recipe removed from favorites` });
     });
   },
-
+  removeFavorite: (req, res) => {
+    return res.json({ isAuthenticated: req.isAuthenticated() });
+  },
 };

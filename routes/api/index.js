@@ -3,7 +3,7 @@
 const router = require("express").Router();
 const controller = require("../../controllers/controller.js");
 const passport = require("../../config/passport");
-// const checkAuth = require("../../config/middleware/checkAuth");
+const isAuthenticated = require("../../config/middleware/isAuthenticated");
 
 // // login section
 router.post("/signup", controller.signup);
@@ -11,11 +11,11 @@ router.post("/signup", controller.signup);
 router.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/login" }),
-  function(req, res) {
+  function (req, res) {
     console.log(`req body -${req.user}`);
     res.json({
       message: "user authenticated",
-      user: req.user
+      user: req.user,
     });
   }
 );
@@ -27,16 +27,14 @@ router.post("/saveRecipe", controller.saveRecipe);
 // get favorites
 router.get("/getFavorites", controller.getFavorites);
 
+router.get("/user-status", controller.getFavorites);
+
 router.delete("/removeFavorite", controller.removeFavorite);
 
-// //checking if signed in
-// router.get("/checkAuth", checkAuth, function(req, res) {
-//   console.log(`${req.user} is checking auth...`);
-//   return res.status(200).json({
-//     status: "Login successful!"
-//   });
-// });
-
+//checking if signed in
+router.get("/check-auth", function (req, res) {
+  return res.sendStatus(req.isUnauthenticated() ? 200 : 401);
+});
 
 // Route for logging user out
 router.get("/logout", controller.logout);

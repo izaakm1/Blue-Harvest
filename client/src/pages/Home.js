@@ -13,12 +13,11 @@ import API from "../utils/API";
 
 const styles = {
   sectionHeader: {
-    fontFamily: "Fjalla One"
+    fontFamily: "Fjalla One",
   },
   grid: {
-    overflowX: "auto"
-  }
-
+    overflowX: "auto",
+  },
   // searchBar: {
   //   marginBottom: '100px'
   // }
@@ -32,13 +31,13 @@ class Home extends React.Component {
       Thursday: {},
       Friday: {},
       Saturday: {},
-      Sunday: {}
+      Sunday: {},
     },
     recipes: [],
     favorites: [],
     searchTerm: "",
     view: "Recommended",
-    redirect: false
+    redirect: false,
     // ingredients: []
   };
 
@@ -52,7 +51,7 @@ class Home extends React.Component {
   //   this.setState({ingredients: stateIngredients});
   // };
 
-  handleView = newview => {
+  handleView = (newview) => {
     console.log(`view is changing to ${newview}`);
     if (newview === "Favorites") {
       this.getFavorites();
@@ -72,25 +71,24 @@ class Home extends React.Component {
     this.setState({ calendarRecipes: newCalendarRecipes });
   };
 
-  handleUpdateSearchTerm = term => {
+  handleUpdateSearchTerm = (term) => {
     this.setState({ searchTerm: term });
   };
 
-  handleUpdateRecipes = recipes => {
+  handleUpdateRecipes = (recipes) => {
     // this.setState({recipes : {}});
     this.setState({ recipes: recipes.hits });
   };
-  // Getting Items From LocalStorage On reload
+  // Getting Items From LocalStorage On reload // TODO refactor to use dynamo
   componentWillMount() {
     const saveCal = localStorage.getItem("day");
     if (saveCal === null) {
       return;
     } else {
       this.setState({
-        calendarRecipes: JSON.parse(saveCal)
+        calendarRecipes: JSON.parse(saveCal),
       });
     }
-    // console.log(saveCal, typeof saveCal);
   }
 
   // Setting Items For LocalStorage
@@ -105,23 +103,16 @@ class Home extends React.Component {
   };
 
   getFavorites = () => {
-    console.log(`getting favorites`);
-    API.getFavorites().then(res => {
-      console.log(res)
-      if (res.data.message === "user not signed in") {
-        this.setState({ redirect: true });
-      } else {
-        let recipeList = res.data.hits;
-        console.log(res);
-        this.setState({ favorites: recipeList });
-        console.log(`Favorites are - ${this.state.favorites}`);
-      }
+    API.getFavorites().then((res) => {
+      console.log({ res });
+      let recipeList = res.data.hits;
+      console.log(res);
+      this.setState({ favorites: recipeList });
     });
   };
 
   handleLogout = () => {
-    console.log(`\nlogging out user...`);
-    API.logout().then(result => {
+    API.logout().then((result) => {
       console.log(result);
       this.setState({ redirect: true });
     });
@@ -179,11 +170,8 @@ class Home extends React.Component {
               calendarRecipes={this.state.calendarRecipes}
               handleAddToIngredients={this.handleAddToIngredients}
             />
-
             <br />
-
             <br />
-
             <Grid
               container
               spacing={8}
