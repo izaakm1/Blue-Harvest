@@ -38,7 +38,7 @@ function SimpleModal(props) {
   return (
     <div>
       <ShoppingIcon onClick={showShoppingList} />
-      <Dialog open={showShoppingList} onClose={handleClose} scroll="paper">
+      <Dialog open={showShoppingList} onClose={handleClose} scroll="paper" style={{display}}>
         <DialogTitle>Shopping List</DialogTitle>
         <DialogContent>
           <DialogContentText>
