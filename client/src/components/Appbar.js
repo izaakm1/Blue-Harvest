@@ -1,24 +1,21 @@
-import React from "react";
-import PropTypes from "prop-types";
-import classNames from "classnames";
-import { withStyles } from "@material-ui/core/styles";
 import {
-  Drawer,
   AppBar,
-  Toolbar,
-  List,
   CssBaseline,
   Divider,
+  Drawer,
+  List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Toolbar,
 } from "@material-ui/core";
-
-import FavoriteIcon from "@material-ui/icons/FavoriteBorder";
+import { withStyles } from "@material-ui/core/styles";
 import ExitToApp from "@material-ui/icons/ExitToApp";
-
-import Image from "./img/Logo.png";
+import FavoriteIcon from "@material-ui/icons/FavoriteBorder";
+import classNames from "classnames";
+import React from "react";
 import GroceryPopup from "./GroceryPopup";
+import Image from "./img/Logo.png";
 
 const drawerWidth = 240;
 
@@ -88,100 +85,89 @@ const styles = (theme) => ({
   },
 });
 
-class MiniDrawer extends React.Component {
-  state = {
-    open: false,
-    shoppingCartOpen: false,
-  };
+const MiniDrawer = (props) => {
+  const { classes } = props;
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [showShoppingList, setShowShoppingList] = React.useState(false);
 
-  handleDrawerOpen() {
-    this.setState({ open: true });
+  function handleDrawerOpen() {
+    setIsOpen(true);
   }
 
-  handleDrawerClose() {
-    this.setState({ open: false });
+  function handleDrawerClose() {
+    setIsOpen(false);
   }
 
-  handleShowShoppingCart() {
-    this.setState({ showShoppingCart: !this.state.showShoppingCart });
+  function handleShowShoppingList() {
+    setShowShoppingList(!showShoppingList);
   }
 
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar position="fixed" color="inherit" className={classes.appBar}>
-          <Toolbar disableGutters={true}>
-            <img className={classes.image} src={Image} alt="blank" />
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          variant="permanent"
-          className={classNames(classes.drawer, {
-            [classes.drawerOpen]: this.state.open,
-            [classes.drawerClose]: !this.state.open,
-          })}
-          classes={{
-            paper: classNames({
-              [classes.drawerOpen]: this.state.open,
-              [classes.drawerClose]: !this.state.open,
-            }),
-          }}
-          open={this.state.open}
-          onMouseOver={this.handleDrawerOpen}
-          onMouseOut={this.handleDrawerClose}
-        >
-          <div className={classes.toolbar}></div>
-          <Divider />
-          <List>
-            {["Favorites", "Shopping List", "Log Out"].map((text, index) => (
-              <ListItem
-                button
-                key={text}
-                onClick={() => {
-                  if (text === "Favorites") {
-                    this.props.handleView(text);
-                  }
-                  if (text === "Log Out") {
-                    this.props.handleLogout();
-                  }
-                  if (text === "Shopping List") {
-                    this.handleShowShoppingList();
-                  }
-                }}
-              >
-                <ListItemIcon>
-                  {index === 0 ? (
-                    <FavoriteIcon />
-                  ) : index === 1 ? (
-                    <GroceryPopup
-                      calendarRecipes={this.props.calendarRecipes}
-                      showShoppingCart={this.state.showShoppingCart}
-                    />
-                  ) : (
-                    <ExitToApp />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-        </Drawer>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          {this.props.children}
-        </main>
-      </div>
-    );
-  }
-}
-
-MiniDrawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position="fixed" color="inherit" className={classes.appBar}>
+        <Toolbar disableGutters={true}>
+          <img className={classes.image} src={Image} alt="blank" />
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        className={classNames(classes.drawer, {
+          [classes.drawerOpen]: isOpen,
+          [classes.drawerClose]: !isOpen,
+        })}
+        classes={{
+          paper: classNames({
+            [classes.drawerOpen]: isOpen,
+            [classes.drawerClose]: !isOpen,
+          }),
+        }}
+        open={isOpen}
+        onMouseOver={handleDrawerOpen}
+        onMouseOut={handleDrawerClose}
+      >
+        <div className={classes.toolbar}></div>
+        <Divider />
+        <List>
+          {["Favorites", "Shopping List", "Log Out"].map((text, index) => (
+            <ListItem
+              button
+              key={text}
+              onClick={() => {
+                if (text === "Favorites") {
+                  props.handleView(text);
+                }
+                if (text === "Log Out") {
+                  props.handleLogout();
+                }
+                if (text === "Shopping List") {
+                  handleShowShoppingList();
+                }
+              }}
+            >
+              <ListItemIcon>
+                {index === 0 ? (
+                  <FavoriteIcon />
+                ) : index === 1 ? (
+                  <GroceryPopup
+                    calendarRecipes={props.calendarRecipes}
+                    showShoppingList={showShoppingList}
+                  />
+                ) : (
+                  <ExitToApp />
+                )}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {props.children}
+      </main>
+    </div>
+  );
 };
-
 export default withStyles(styles, { withTheme: true })(MiniDrawer);

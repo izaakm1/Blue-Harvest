@@ -14,18 +14,18 @@ const styles = {
 };
 
 const App = () => {
-  async function componentWillMount() {
-    const status = await API.checkLoggedInStatus();
-    Promise.resolve(status).then(() => {
-      if (status.status === 200 && window.location.pathname !== "/home") {
-        window.location.replace("/home");
-      }
-      if (status.status === 200 && window.location.pathname === "/home") {
-        window.location.replace("/login");
-      }
-    });
-  }
-  componentWillMount();
+  // async function componentWillMount() {
+  //   const status = await API.checkLoggedInStatus();
+  //   Promise.resolve(status).then(() => {
+  //     if (status.status === 200 && window.location.pathname !== "/home") {
+  //       window.location.replace("/home");
+  //     }
+  //     if (status.status === 200 && window.location.pathname === "/home") {
+  //       window.location.replace("/login");
+  //     }
+  //   });
+  // }
+  // componentWillMount();
 
   return <Routes />;
 };
