@@ -99,6 +99,7 @@ const MiniDrawer = (props) => {
   }
 
   function handleShowShoppingList() {
+    console.log({ showShoppingList });
     setShowShoppingList(!showShoppingList);
   }
 
@@ -152,6 +153,7 @@ const MiniDrawer = (props) => {
                   <GroceryPopup
                     calendarRecipes={props.calendarRecipes}
                     showShoppingList={showShoppingList}
+                    setShowShoppingList={setShowShoppingList}
                   />
                 ) : (
                   <ExitToApp />

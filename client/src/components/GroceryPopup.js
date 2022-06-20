@@ -1,6 +1,3 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
 import {
   Button,
   Dialog,
@@ -9,8 +6,10 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
-import ShoppingList from "./ShoppingList";
+import { withStyles } from "@material-ui/core/styles";
 import ShoppingIcon from "@material-ui/icons/ShoppingCartOutlined";
+import React from "react";
+import ShoppingList from "./ShoppingList";
 
 const styles = (theme) => ({
   paper: {
@@ -30,28 +29,24 @@ const styles = (theme) => ({
 });
 
 function SimpleModal(props) {
-  const [showShoppingCart, setShowShoppingCart] = React.useState(false);
-
-  function handleOpen() {
-    setShowShoppingCart(true);
-  }
+  const { showShoppingList, setShowShoppingList, calendarRecipes } = props;
 
   function handleClose() {
-    setShowShoppingCart(false);
+    setShowShoppingList(false);
   }
 
   return (
     <div>
-      <ShoppingIcon onClick={props.showShoppingCart} />
-      <Dialog open={showShoppingCart} onClose={handleClose} scroll="paper">
+      <ShoppingIcon onClick={showShoppingList} />
+      <Dialog open={showShoppingList} onClose={handleClose} scroll="paper">
         <DialogTitle>Shopping List</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <ShoppingList calendarRecipes={props.calendarRecipes} />
+            <ShoppingList calendarRecipes={calendarRecipes} />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="outlinedPrimary">
+          <Button onClick={handleClose} variant="contained">
             Close
           </Button>
         </DialogActions>
